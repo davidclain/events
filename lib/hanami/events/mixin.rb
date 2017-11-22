@@ -24,10 +24,12 @@ module Hanami
       end
 
       module ClassMethods
-        def subscribe_to(event_bus, event_name)
-          klass = self
-          event_bus.subscribe(event_name) { |payload| klass.new.(payload) }
-        end
+        def subscribe_to(event_bus, *event_names)
+					klass = self
+					event_names.each do |event_name|
+						event_bus.subscribe(event_name) { |payload| klass.new.(event_name, payload) }
+					end
+				end
       end
     end
   end
